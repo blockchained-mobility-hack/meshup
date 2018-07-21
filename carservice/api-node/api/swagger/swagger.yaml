@@ -87,13 +87,13 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /network:
+  /event:
     # binds a127 app logic to a route
-    x-swagger-router-controller: network
+    x-swagger-router-controller: event
     get:
       description: Returns the network state
       # used as the method name of the controller
-      operationId: getstate
+      operationId: getevents
       responses:
         "200":
           description: Success
@@ -108,7 +108,7 @@ paths:
     post:
       description: Broadcast a network event
       # used as the method name of the controller
-      operationId: poststate
+      operationId: postevent
       parameters:
       - name: body
         in: body
