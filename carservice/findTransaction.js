@@ -4,7 +4,8 @@ const IOTA = require("iota.lib.js")
 // Use 'provider' variable to specify which Full Node to talk to
 const iota = new IOTA({provider: "https://nodes.testnet.iota.org:443"})
 
-var searchValues = {'tags': ['MESHUP']};
+//var searchValues = {'tags': ['MESHUP']};
+var searchValues = {'tags': ['YAUASAABWARAABYASAUAVA99999']};
 
 
 iota.api.findTransactionObjects( searchValues, function( error, txObjects ) {
