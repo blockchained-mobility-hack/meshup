@@ -4,7 +4,7 @@ var SwaggerExpress = require('swagger-express-mw');
 var app = require('express')();
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
-const swaggerDocument = YAML.load('./api/swagger/swagger.yaml'); ///Users/misabelpovoa/Documents/workspace/meshup/carservice/hello-world/api/swagger/swagger.yaml
+const swaggerDocument = YAML.load('./api/swagger/swagger.yaml');
 module.exports = app; // for testing
 
 var config = {
@@ -23,6 +23,7 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
   if (swaggerExpress.runner.swagger.paths['/hello']) {
-    console.log('try this:\ncurl http://127.0.0.1:' + port + '/hello?name=Scott');
+    console.log('try this:\ncurl http://127.0.0.1:' + port + '/hello?name=Isa');
+    console.log('try this:\nhttp://127.0.0.1:' + port + '/api-docs/#/ (in the browser)');
   }
 });
