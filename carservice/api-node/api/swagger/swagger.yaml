@@ -87,13 +87,13 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /network:
+  /event:
     # binds a127 app logic to a route
-    x-swagger-router-controller: network
+    x-swagger-router-controller: event
     get:
       description: Returns the network state
       # used as the method name of the controller
-      operationId: getstate
+      operationId: getevents
       responses:
         "200":
           description: Success
@@ -108,7 +108,7 @@ paths:
     post:
       description: Broadcast a network event
       # used as the method name of the controller
-      operationId: poststate
+      operationId: postevent
       parameters:
       - name: body
         in: body
@@ -151,17 +151,29 @@ definitions:
       message:
         type: string
   NetworkResponse:
-    required:
-      - message
-    properties:
-      message:
-        type: string
+    type: array
+    items:
+      type: object
   Event:
     type: object
     properties:
-      event:
-        description: what happened?
+      vehicle:
+        description: vehicle id (3 char ONLY and upper case)
         type: string
+      lat:
+        description: latitude
+        type: number
+      lon:
+        description: longitude
+        type: number
+      msg:
+        description: message
+        type: string
+    example:
+        vehicle: ONE
+        lat: 40.717000
+        lon: -74.006400
+        msg: 'Airbag: OMG, I just released!'
   Suggestion:
     type: object
     properties:

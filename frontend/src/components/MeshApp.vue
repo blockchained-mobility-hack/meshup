@@ -66,6 +66,7 @@
 </template>
 
 <script>
+import axios from 'axios';  
 export default {
   name: 'MeshApp',
   data () {
@@ -98,6 +99,29 @@ export default {
     }
   },
   methods: {
+    getevents: function () {
+       axios.get('http://localhost:10010/event').then((response) => {
+          console.log(response);
+          this.clearTodo();
+          this.refreshTodo();
+          this.typing = false;
+        }).catch((error) => {
+          console.log(error);
+        });
+    },
+    sendevents: function () {
+      let param = {
+          event: ""
+      };
+      axios.post('http://localhost:10010/event', param).then((response) => {
+        console.log(response);
+        this.clearTodo();
+        this.refreshTodo();xxw
+        this.typing = false;
+      }).catch((error) => {
+        console.log(error);
+      });
+    },
     start_crash: function(){
       $('#car-1').addClass("crash-car-1")
       $('#car-2').addClass("crash-car-2")
@@ -119,6 +143,10 @@ export default {
     set_car: function(car_id){
       this.selected_car = car_id
     }
+  },
+  mounted () {
+    this.getevents();
+    this.sendevents();
   }
 }
 </script>
