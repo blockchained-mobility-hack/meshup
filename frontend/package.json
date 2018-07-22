@@ -1,7 +1,7 @@
 {
-  "name": "kviz_website",
+  "name": "MeshApp",
   "version": "1.0.0",
-  "description": "The basic, static kViz website.",
+  "description": "The app to demonstrate the MeshUp communication service.",
   "author": "Mark Dekker <>",
   "private": true,
   "scripts": {
