@@ -71,6 +71,26 @@
   left: 43.8%; top: 48.5%;
 }
 
+.break-car-1{
+  animation: break-path-1 4s linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes break-path-1 {
+  0% {
+    left: 53.1%; top: 26.84%
+  }
+  30% {
+    left: 48.4%; top: 35.97%
+  }
+  50% {
+    left: 47.8%; top: 41.4%
+  }
+  100% {
+    left: 47.2%; top: 43.55%;
+  }
+}
+
 @keyframes crash-path-1 {
   0% {
     left: 53.1%; top: 26.84%
