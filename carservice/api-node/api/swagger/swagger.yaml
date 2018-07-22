@@ -42,6 +42,72 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /stream:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: stream
+    put:
+      description: Sets the vehicle location
+      # used as the method name of the controller
+      operationId: setvehiclelocation
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Location'
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    get:
+      description: Gets vehicle stream
+      # used as the method name of the controller
+      operationId: getstreamvehicle
+      parameters:
+        - name: name
+          in: query
+          description: vehicle id
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/NetworkResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    post:
+      description: Broadcast message to the network
+      # used as the method name of the controller
+      operationId: sendvehiclemsg
+      parameters:
+         - name: body
+           in: body
+           required: true
+           schema:
+            $ref: '#/definitions/Message'
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /vehicle:
     # binds a127 app logic to a route
     x-swagger-router-controller: vehicle
@@ -183,3 +249,43 @@ definitions:
       vehicle:
         description: which vehicle
         type: integer
+  Message:
+    type: object
+    properties:
+      vehicle:
+        description: vehicle id
+        type: string
+      content:
+        description: message
+        type: string     
+      location:
+        description: location
+        type: object     
+    example:
+      vehicle: car_1
+      content: "Breaks: Nailed it!! From 100 to 0 in 3s"
+      location:
+          lat: 40.717000
+          lon: -74.006400 
+  Location:
+    type: object
+    properties:
+      vehicle:
+        description: vehicle id
+        type: string
+      location:
+        description: location
+        type: object
+        properties:
+          lat:
+            description: latitude
+            type: number
+          lon:
+            description: longitude
+            type: number
+    example:
+      vehicle: car_1
+      location:
+          lat: 40.717000
+          lon: -74.006400
+    
