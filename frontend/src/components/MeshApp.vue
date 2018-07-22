@@ -175,8 +175,6 @@ export default {
     }
   },
   mounted () {
-    this.getevents();
-    this.sendevents();
 
     let convert_to_coordinates = function(element_position){
       let window_width = $('#map-container').width()

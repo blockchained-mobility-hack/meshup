@@ -17,6 +17,11 @@
   box-shadow: 2px 2px 10px 1px rgba(181, 226, 255, 0.3);
 }
 
+.basic-car:focus{
+  background-color: rgb(117, 196, 248);
+  box-shadow: 2px 2px 10px 1px rgba(181, 226, 255, 0.3);
+}
+
 .basic-car.crashed:hover{
   background-color: rgb(252, 95, 56);
   box-shadow: 2px 2px 10px 1px rgba(255, 196, 181, 0.3);
