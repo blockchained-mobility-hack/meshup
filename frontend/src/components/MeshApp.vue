@@ -1,15 +1,15 @@
 <template>
   <div class="hello">
     <div class="uk-position-relative uk-cover-container" style="height:calc(100vh)">
-      <div class="uk-cover-container" style="height:77vw; width:100vw">
-          <a  id="car-1" class="uk-position-absolute uk-transform-center basic-car" 
+      <div id='map-container' class="uk-cover-container" style="height:77vw; width:100vw">
+          <a  id="car_1" class="uk-position-absolute uk-transform-center basic-car" 
               href="#" uk-tooltip="title: Car 1">
           </a>
-          <a v-on:focus="set_car('car_2')" v-on:blur="set_car('')" id="car-2" class="uk-position-absolute uk-transform-center basic-car" href="#" uk-tooltip="title: Car 2"></a>
-          <a v-on:focus="set_car('car_3')" v-on:blur="set_car('')" id="car-3" class="uk-position-absolute uk-transform-center basic-car" href="#" uk-tooltip="title: Car 3"></a>
-          <a v-on:focus="set_car('car_4')" v-on:blur="set_car('')" id="car-4" class="uk-position-absolute uk-transform-center basic-car" href="#" uk-tooltip="title: Car 4"></a>
-          <a v-on:focus="set_car('car_5')" v-on:blur="set_car('')" id="car-5" class="uk-position-absolute uk-transform-center basic-car" href="#" uk-tooltip="title: Car 5"></a>
-          <a v-on:focus="set_car('car_6')" v-on:blur="set_car('')" id="car-6" class="uk-position-absolute uk-transform-center basic-car" href="#" uk-tooltip="title: Car 6"></a>
+          <a v-on:focus="set_car('car_2')" v-on:blur="set_car('')" id="car_2" class="uk-position-absolute uk-transform-center basic-car" href="#" uk-tooltip="title: Car 2"></a>
+          <a v-on:focus="set_car('car_3')" v-on:blur="set_car('')" id="car_3" class="uk-position-absolute uk-transform-center basic-car" href="#" uk-tooltip="title: Car 3"></a>
+          <a v-on:focus="set_car('car_4')" v-on:blur="set_car('')" id="car_4" class="uk-position-absolute uk-transform-center basic-car" href="#" uk-tooltip="title: Car 4"></a>
+          <a v-on:focus="set_car('car_5')" v-on:blur="set_car('')" id="car_5" class="uk-position-absolute uk-transform-center basic-car" href="#" uk-tooltip="title: Car 5"></a>
+          <a v-on:focus="set_car('car_6')" v-on:blur="set_car('')" id="car_6" class="uk-position-absolute uk-transform-center basic-car" href="#" uk-tooltip="title: Car 6"></a>
           <div id="message-beacon-1" class="uk-position-absolute uk-transform-center send_message_beacon crash_location" ></div>
           <img  src="../assets/map_bg.png" alt="" style="position: relative; height:77vw; width:100vw; z-index: -4">
           
@@ -28,18 +28,26 @@
             </div>
           </div>
         </div>
-        <div class="uk-card-body uk-padding-remove-vertical uk-margin" style="height: 200px; overflow-y: scroll">
-          <div class="uk-alert-primary" uk-alert><span class='small-time-stamp'>14:55:30</span> <p class="uk-margin-remove">Crash!</p></div>
-          <div class="uk-alert" uk-alert><span class='small-time-stamp'>14:55:30</span> <p class="uk-margin-remove">Car 1 - Received crash notification, rerouting via 14th Ave.</p></div>
-         </div></div>
+        <div class="uk-card-body uk-padding-remove-vertical uk-margin" 
+              style="height: 200px; overflow-y: scroll">
+          <div class="uk-alert" uk-alert
+                v-for="msg in msgs"
+              :key="msg.time + msg.sender"
+              :class="{'uk-alert-primary': is_from_me(msg.sender)}">
+              <span class='small-time-stamp'>{{msg.time}}</span> 
+              <p class="uk-margin-remove"
+                  ><b>{{msg.sender}}</b> - {{msg.content}}</p></div>
+        </div>
       </div>
+    </div>
 
       <div  class="uk-card uk-card-default uk-width-1-4 uk-position-top-right uk-margin-small uk-margin-small-right console"
             v-bind:class="{display: display_console_2}">
         <div class="uk-card-header">
           <div class="uk-grid-small uk-flex-middle" uk-grid>
             <div class="uk-width-auto">
-              <img class="" width="80" height="60" src="../assets/car_2.jpg">
+              <img class="" width="80" height="60" 
+                    :src="get_img_path(selected_car)">
             </div>
             <div class="uk-width-expand">
               <h3 class="uk-card-title uk-margin-remove-bottom">{{selected_car}}</h3>
@@ -47,12 +55,15 @@
             </div>
           </div>
         </div>
-        <div class="uk-card-body uk-padding-remove-vertical uk-margin" style="height: 200px; overflow-y: scroll">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
+        <div class="uk-card-body uk-padding-remove-vertical uk-margin" 
+              style="height: 200px; overflow-y: scroll">
+          <div class="uk-alert" uk-alert
+                v-for="msg in msgs"
+              :key="msg.time + msg.sender"
+              :class="{'uk-alert-primary': is_from_me(msg.sender)}">
+              <span class='small-time-stamp'>{{msg.time}}</span> 
+              <p class="uk-margin-remove"
+                  ><b>{{msg.sender}}</b> - {{msg.content}}</p></div>
         </div>
       </div>
 
@@ -66,7 +77,8 @@
 </template>
 
 <script>
-import axios from 'axios';  
+import axios from 'axios';
+
 export default {
   name: 'MeshApp',
   data () {
@@ -76,10 +88,18 @@ export default {
       crashed_car: '',
       car_properties: {'car_1': {'description': 'Mercedes F015'}
                       ,'car_2': {'description': 'BMW Vision i'}
-                      ,'car_3': {'description': 'BMW Vision i'}
-                      ,'car_4': {'description': 'BMW Vision i'}
+                      ,'car_3': {'description': 'VW Cedric'}
+                      ,'car_4': {'description': 'Audi Aicon'}
                       ,'car_5': {'description': 'BMW Vision i'}
-                      ,'car_6': {'description': 'BMW Vision i'}}
+                      ,'car_6': {'description': 'BMW Vision i'}},
+      msgs: [{'sender': 'car_3', 'time': '15:32:12', 'content': "I Crashed! Sorry, wasn't paying attention", 'latitude': '48.189926', 'longitude': '11.498083'}
+            ,{'sender': 'car_1', 'time': '15:32:24', 'content': "Ok, rereouting via 14th Ave.", 'latitude': '48.189926', 'longitude': '11.498083'}
+      
+      ],
+      msgs_crashed: [{'sender': 'car_3', 'time': '15:32:12', 'content': "I Crashed! Sorry, wasn't paying attention", 'latitude': '48.189926', 'longitude': '11.498083'}
+                    ,{'sender': 'car_1', 'time': '15:32:24', 'content': "Ok, rereouting via 14th Ave.", 'latitude': '48.189926', 'longitude': '11.498083'}
+      
+      ],
     }
   },
   computed: {
@@ -123,16 +143,26 @@ export default {
       });
     },
     start_crash: function(){
-      $('#car-1').addClass("crash-car-1")
-      $('#car-2').addClass("crash-car-2")
+      let crash_coords = {'latitude': 40.71, 'longitude': 74.0}
+
+      $('#car_1').addClass("crash-car-1")
+      $('#car_2').addClass("crash-car-2")
       $('#message-beacon-1').addClass("grow-beacon")
       var that = this;
       setTimeout(function() {
         that.crashed_car = 'car_1'
+        that.sendevents('car_1', 'I Crashed! Sorry, I was not paying attention', crash_coords)
       }, 2200);
     },
     get_img_path: function(car_id){
-      return './assets/' + car_id + '.jpg'
+      return './static/' + car_id + '.jpg'
+    },
+    is_from_me(car_id){
+      if(car_id === this.selected_car) {
+        return true
+      } else {
+        return false
+      }
     },
     get_description: function(car_id){
       if (car_id in this.car_properties) {
@@ -147,6 +177,51 @@ export default {
   mounted () {
     this.getevents();
     this.sendevents();
+
+    let convert_to_coordinates = function(element_position){
+      let window_width = $('#map-container').width()
+      let top = element_position.top / window_width
+      let left = element_position.left / window_width
+      let top_edge = 73.9744
+      let left_edge = 40.6881
+      let coords = {'latitude': left_edge + left * 0.01/0.2, 'longitude': top_edge + top * 0.01/0.2}
+
+      return coords
+    }
+
+
+    JQuery.fn.onPositionChanged = function (trigger, millis) {
+      if (millis == null) millis = 100;
+      var o = $(this[0]); // our jquery object
+      if (o.length < 1) return o;
+
+      var lastPos = null;
+      var lastOff = null;
+      setInterval(function () {
+          if (o == null || o.length < 1) return o; // abort if element is non existend eny more
+          if (lastPos == null) lastPos = o.position();
+          var newPos = o.position();
+          if (lastPos.top != newPos.top || lastPos.left != newPos.left) {
+              $(this).trigger('onPositionChanged', { lastPos: lastPos, newPos: newPos });
+              lastPos = o.position();
+              // console.log('hello')
+              if (typeof (trigger) == "function") {
+                let coords = trigger(newPos)
+                
+              }
+          }
+      }, millis);
+
+      return o;
+    };
+
+    $("#car_1").onPositionChanged(convert_to_coordinates);
+    $("#car_2").onPositionChanged(convert_to_coordinates);
+    $("#car_3").onPositionChanged(convert_to_coordinates);
+    $("#car_4").onPositionChanged(convert_to_coordinates);
+    $("#car_5").onPositionChanged(convert_to_coordinates);
+    $("#car_6").onPositionChanged(convert_to_coordinates);
+
   }
 }
 </script>
@@ -155,3 +230,4 @@ export default {
 <style scoped>
 
 </style>
+
