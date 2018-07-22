@@ -78,7 +78,7 @@ function setvehiclelocation(req, res) {
     // 01 January 1970, 00:00:00, 000 miliseconds
     var timestamp = '' + timeNow.getDate() + ' ' +  monthNames[timeNow.getMonth()] + ' ' + timeNow.getFullYear() + ', ' + timeNow.getHours() + ':' + timeNow.getMinutes() + ':' + timeNow.getSeconds() + ', ' + timeNow.getMilliseconds() + ' miliseconds';
 
-    //console.log('Stream (sendvehiclemsg) has ' + JSON.stringify(stream))
+    console.log('Stream (sendvehiclemsg) has ' + JSON.stringify(stream))
     //console.log(timestamp);
     var msgObject = {
         "location": {

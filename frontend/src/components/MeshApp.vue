@@ -10,9 +10,9 @@
           <a v-on:focus="set_car('car_4')" v-on:blur="set_car('')" id="car_4" class="uk-position-absolute uk-transform-center basic-car" href="#" uk-tooltip="title: Car 4"></a>
           <a v-on:focus="set_car('car_5')" v-on:blur="set_car('')" id="car_5" class="uk-position-absolute uk-transform-center basic-car" href="#" uk-tooltip="title: Car 5"></a>
           <a v-on:focus="set_car('car_6')" v-on:blur="set_car('')" id="car_6" class="uk-position-absolute uk-transform-center basic-car" href="#" uk-tooltip="title: Car 6"></a>
+          <a v-on:focus="set_car('traffic_sign_1')" v-on:blur="set_car('')" id="traffic_sign_1" class="uk-position-absolute uk-transform-center basic-car traffic_sign" href="#" uk-tooltip="title: Electronic Traffic Sign"></a>
           <div id="message-beacon-1" class="uk-position-absolute uk-transform-center send_message_beacon crash_location" ></div>
           <img  src="../assets/map_bg.png" alt="" style="position: relative; height:77vw; width:100vw; z-index: -4">
-          
       </div>
 
       <div  class="uk-card uk-card-default uk-width-1-4 uk-position-top-left uk-margin-small uk-margin-small-left console"
@@ -33,7 +33,7 @@
           <div class="uk-alert" uk-alert
                 v-for="msg in msgs[crashed_car]"
               :key="msg.time + msg.sender"
-              :class="{'uk-alert-primary': is_from_me(msg.sender)}">
+              :class="{'uk-alert-primary': is_from_me(msg.sender, crashed_car)}">
               <span class='small-time-stamp'>{{msg.time}}</span> 
               <p class="uk-margin-remove"
                   ><b>{{msg.sender}}</b> - {{msg.content}}</p></div>
@@ -60,7 +60,7 @@
           <div class="uk-alert" uk-alert
                 v-for="msg in msgs[crashed_car]"
               :key="msg.time + msg.sender"
-              :class="{'uk-alert-primary': is_from_me(msg.sender)}">
+              :class="{'uk-alert-primary': is_from_me(msg.sender, selected_car)}">
               <span class='small-time-stamp'>{{msg.time}}</span> 
               <p class="uk-margin-remove"
                   ><b>{{msg.sender}}</b> - {{msg.content}}</p></div>
@@ -91,8 +91,9 @@ export default {
                       ,'car_3': {'description': 'VW Cedric'}
                       ,'car_4': {'description': 'Audi Aicon'}
                       ,'car_5': {'description': 'BMW Vision i'}
-                      ,'car_6': {'description': 'BMW Vision i'}},
-      msgs: {'car_1': []},
+                      ,'car_6': {'description': 'BMW Vision i'}
+                      ,'traffic_sign_1': {'description': 'Electronic Speed Limit'}},
+      msgs: {'car_1': [], 'car_2': [], 'car_3': [], 'car_4': [], 'car_5': [], 'car_6': []},
     }
   },
   computed: {
@@ -168,17 +169,30 @@ export default {
         that.crashed_car = 'car_1'
         that.sendevent('car_1', 'I Crashed! Sorry, I was not paying attention', crash_coords)
         that.msgs['car_1'] = that.getstream('car_1')
+        let thet = that
         $('#car_6').addClass("break-car-1")
-        setTimeout(function() {
-          that.sendevent('car_6', 'Emergency Braking Maneuver! Could be due to crash.', crash_coords)
-        }, 300);
       }, 3000);
+
+      setTimeout(function() {
+        that.sendevent('car_6', 'Emergency Braking Maneuver! Due to crash.', crash_coords)
+        that.msgs['car_1'] = that.getstream('car_1')
+      }, 4500);
+
+      setTimeout(function() {
+        that.sendevent('traffic_sign_1', 'Interpreted a Crash from the Tangle. Reducing Speed Limit.', crash_coords)
+        that.msgs['car_1'] = that.getstream('car_1')
+      }, 5200);
+
+      setTimeout(function() {
+        that.sendevent('car_3', 'Rerouting via 14th Ave. to avoid accident.', crash_coords)
+        that.msgs['car_1'] = that.getstream('car_1')
+      }, 10000);
     },
     get_img_path: function(car_id){
       return './static/' + car_id + '.jpg'
     },
-    is_from_me(car_id){
-      if(car_id === this.selected_car) {
+    is_from_me(car_id_msg, car_id){
+      if(car_id === car_id_msg) {
         return true
       } else {
         return false
@@ -192,6 +206,7 @@ export default {
 
     set_car: function(car_id){
       this.selected_car = car_id
+      that.msgs[car_id] = that.getstream(car_id)
     }
   },
   mounted () {

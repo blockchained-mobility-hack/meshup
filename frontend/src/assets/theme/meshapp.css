@@ -7,6 +7,11 @@
   border-radius: 100%;
 }
 
+.basic-car.traffic_sign{
+  background-color: rgb(121, 23, 233);
+  border: solid 1px rgb(49, 2, 110);
+}
+
 .basic-car.crashed{
   background-color: rgb(240, 49, 1);
   border: solid 1px rgb(110, 2, 2);
@@ -29,6 +34,10 @@
 
 #car_1{
   left: 53.1%; top: 26.84%;
+}
+
+#traffic_sign_1{
+  left: 47.8%; top: 41.4%;
 }
 
 #car_2{

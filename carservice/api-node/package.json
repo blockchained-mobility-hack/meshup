@@ -11,15 +11,7 @@
     "express": "^4.12.3",
     "swagger-express-mw": "^0.1.0",
     "swagger-ui-express": "latest",
-    "yamljs": "^0.3.0",
-    "@iota": "latest",
-    "async": "latest",
-    "bignumber": "latest",
-    "crypto-js": "latest",
-    "iota.lib.js": "latest",
-    "lodash": "latest",
-    "node-fetch": "latest",
-    "xmlhttprequest": "latest"
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "should": "^7.1.0",
