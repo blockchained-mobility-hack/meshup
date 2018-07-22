@@ -17,10 +17,13 @@ function setvehiclelocation(req, res) {
 
     var id = req.swagger.params.body.value.vehicle;
     var index = vehicles.findIndex(x => x.id === id);
+    console.log('position car at setvehiclelocation (before): ' + JSON.stringify(vehicles[index].location));
 
     vehicles[index].location = req.swagger.params.body.value.location;
 
-    console.log(JSON.stringify(vehicles[index]));
+    //console.log(JSON.stringify(vehicles[index]));
+
+    console.log('position car at setvehiclelocation (after): ' + JSON.stringify(vehicles[index].location));
 
     res.json('vehicle ' + id + ' is now at ' + JSON.stringify(vehicles[index].location));
   }
@@ -35,21 +38,22 @@ function setvehiclelocation(req, res) {
 
     var lat = Math.round(vehicles[index].location.lat*100)/100;
     var lon = Math.round(vehicles[index].location.lon*100)/100;
+
     vehicles[index].stream = [];
     
-    console.log(JSON.stringify(vehicles[index]));
+    console.log('stream at getstreamvehicle (before): ' + JSON.stringify(vehicles[index].stream));
 
     stream.forEach(function(element) {
-    //console.log(element);
-    var latStream = Math.round(element.location.lat*100)/100;
-    var lonStream = Math.round(element.location.lon*100)/100;
+        //console.log(element);
+        var latStream = Math.round(element.location.lat*100)/100;
+        var lonStream = Math.round(element.location.lon*100)/100;
 
-    if (lat == latStream && lon == lonStream) {
-        vehicles[index].stream.push(element);
-    }
+        if (lat === latStream && lon === lonStream) {
+            vehicles[index].stream.push(element);
+        }
     });
-
-    console.log(JSON.stringify(vehicles[index]));
+    
+    console.log('vehicle at getstreamvehicle (after): ' + JSON.stringify(vehicles[index].stream));
     res.json(vehicles[index].stream);
   }
 
@@ -66,7 +70,8 @@ function setvehiclelocation(req, res) {
     // 01 January 1970, 00:00:00, 000 miliseconds
     var timestamp = '' + timeNow.getDate() + ' ' +  monthNames[timeNow.getMonth()] + ' ' + timeNow.getFullYear() + ', ' + timeNow.getHours() + ':' + timeNow.getMinutes() + ':' + timeNow.getSeconds() + ', ' + timeNow.getMilliseconds() + ' miliseconds';
 
-    console.log(timestamp);
+    console.log('Stream (sendvehiclemsg) has ' + JSON.stringify(stream))
+    //console.log(timestamp);
     var msgObject = {
         "location": {
             "lat": req.swagger.params.body.value.location.lat,
@@ -77,9 +82,10 @@ function setvehiclelocation(req, res) {
         'content': req.swagger.params.body.value.content
       };
 
+    console.log('Stream (sendvehiclemsg) has now ' + JSON.stringify(stream));
+
     stream.push(msgObject);
-    console.log(JSON.stringify(stream));
-    res.json('Stream has now ' + JSON.stringify(msgObject));
+    res.json('Stream (sendvehiclemsg) has now ' + JSON.stringify(stream));
   }
 
 var stream = [

@@ -31,7 +31,7 @@
         <div class="uk-card-body uk-padding-remove-vertical uk-margin" 
               style="height: 200px; overflow-y: scroll">
           <div class="uk-alert" uk-alert
-                v-for="msg in msgs"
+                v-for="msg in msgs[crashed_car]"
               :key="msg.time + msg.sender"
               :class="{'uk-alert-primary': is_from_me(msg.sender)}">
               <span class='small-time-stamp'>{{msg.time}}</span> 
@@ -58,7 +58,7 @@
         <div class="uk-card-body uk-padding-remove-vertical uk-margin" 
               style="height: 200px; overflow-y: scroll">
           <div class="uk-alert" uk-alert
-                v-for="msg in msgs"
+                v-for="msg in msgs[crashed_car]"
               :key="msg.time + msg.sender"
               :class="{'uk-alert-primary': is_from_me(msg.sender)}">
               <span class='small-time-stamp'>{{msg.time}}</span> 
@@ -92,14 +92,7 @@ export default {
                       ,'car_4': {'description': 'Audi Aicon'}
                       ,'car_5': {'description': 'BMW Vision i'}
                       ,'car_6': {'description': 'BMW Vision i'}},
-      msgs: [{'sender': 'car_3', 'time': '15:32:12', 'content': "I Crashed! Sorry, wasn't paying attention", 'latitude': '48.189926', 'longitude': '11.498083'}
-            ,{'sender': 'car_1', 'time': '15:32:24', 'content': "Ok, rereouting via 14th Ave.", 'latitude': '48.189926', 'longitude': '11.498083'}
-      
-      ],
-      msgs_crashed: [{'sender': 'car_3', 'time': '15:32:12', 'content': "I Crashed! Sorry, wasn't paying attention", 'latitude': '48.189926', 'longitude': '11.498083'}
-                    ,{'sender': 'car_1', 'time': '15:32:24', 'content': "Ok, rereouting via 14th Ave.", 'latitude': '48.189926', 'longitude': '11.498083'}
-      
-      ],
+      msgs: {'car_1': []},
     }
   },
   computed: {
@@ -119,31 +112,43 @@ export default {
     }
   },
   methods: {
-    getevents: function () {
-       axios.get('http://localhost:10010/event').then((response) => {
-          console.log(response);
-          this.clearTodo();
-          this.refreshTodo();
-          this.typing = false;
+    updatelocation: function (id, location) {
+
+      let param = {
+                "vehicle": id,
+                "location": location
+              };
+              
+       axios.put('http://localhost:10010/stream', param).then((response) => {
+        
         }).catch((error) => {
           console.log(error);
         });
     },
-    sendevents: function () {
+    sendevent: function (id, content, location) {
       let param = {
-          event: ""
-      };
-      axios.post('http://localhost:10010/event', param).then((response) => {
-        console.log(response);
-        this.clearTodo();
-        this.refreshTodo();xxw
-        this.typing = false;
+                    "vehicle": id,
+                    "content": content,
+                    "location": location
+                  };
+      axios.post('http://localhost:10010/stream', param).then((response) => {
+      }).catch((error) => {
+        console.log('error: '+error);
+      });
+    },
+    getstream: function (id) {
+
+      let that = this;
+
+      axios.get('http://localhost:10010/stream?name='+id).then((response) => {
+        
+        that.msgs[id] = response.data;
       }).catch((error) => {
         console.log(error);
       });
     },
     start_crash: function(){
-      let crash_coords = {'latitude': 40.71, 'longitude': 74.0}
+      let crash_coords = {'lat': 40.71, 'lon': 73.99}
 
       $('#car_1').addClass("crash-car-1")
       $('#car_2').addClass("crash-car-2")
@@ -151,8 +156,9 @@ export default {
       var that = this;
       setTimeout(function() {
         that.crashed_car = 'car_1'
-        that.sendevents('car_1', 'I Crashed! Sorry, I was not paying attention', crash_coords)
-      }, 2200);
+        that.sendevent('car_1', 'I Crashed! Sorry, I was not paying attention', crash_coords)
+        that.msgs['car_1'] = that.getstream('car_1')
+      }, 2500);
     },
     get_img_path: function(car_id){
       return './static/' + car_id + '.jpg'
@@ -175,6 +181,8 @@ export default {
     }
   },
   mounted () {
+    // -----------------------------------------------
+    // ISA HERE
 
     let convert_to_coordinates = function(element_position){
       let window_width = $('#map-container').width()
@@ -182,11 +190,12 @@ export default {
       let left = element_position.left / window_width
       let top_edge = 73.9744
       let left_edge = 40.6881
-      let coords = {'latitude': left_edge + left * 0.01/0.2, 'longitude': top_edge + top * 0.01/0.2}
+      let coords = {'lat': left_edge + left * 0.01/0.2, 'lon': top_edge + top * 0.01/0.2}
 
       return coords
     }
 
+    var that = this;
 
     JQuery.fn.onPositionChanged = function (trigger, millis) {
       if (millis == null) millis = 100;
@@ -202,10 +211,10 @@ export default {
           if (lastPos.top != newPos.top || lastPos.left != newPos.left) {
               $(this).trigger('onPositionChanged', { lastPos: lastPos, newPos: newPos });
               lastPos = o.position();
-              // console.log('hello')
               if (typeof (trigger) == "function") {
                 let coords = trigger(newPos)
-                
+                that.updatelocation(o[0].id, coords)
+                that.getstream(o[0].id)
               }
           }
       }, millis);
