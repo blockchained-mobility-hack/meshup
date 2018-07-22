@@ -1,6 +1,5 @@
 # MESHUP
 * MESHUP    Motorized Emergency Safety Helper Utilizing P2P
-* MESHAPP   Motorized Emergency Safety Helper Achievable Prototype Presentation
 
 ## Platform
 ![IOTA](https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Iota_logo.png/320px-Iota_logo.png)
