@@ -20,7 +20,8 @@ Our team consists of five passionated guy with different backgrounds.
 **[Fabian](https://github.com/M3shup)** business practioneer 
 
  ## IDEA
-Vehicle 2 vehicle communication via blockchain to assure secure trustful communication
+ 
+Localised and open IOT communication service via IOTA tangle to assure secure trustful communication.
 
 ## TECHNOLOGY
 For this project you will need to install:
