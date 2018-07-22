@@ -6,19 +6,24 @@
 ![IOTA](https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Iota_logo.png/320px-Iota_logo.png)
 
 ## Development tools and APIs
+
+For this project you will need to install:
 - [Node.js](https://nodejs.org/en/)
-- [IOTA Javascript Library](https://github.com/iotaledger/iota.lib.js/)
+- [webpack](https://webpack.js.org)
+- [swagger](https://swagger.io/)
+
+Key libraries and APIs used (are loaded automatically with npm):
 - [Vue.js](https://vuejs.org)
 - [UIkit](https://getuikit.com)
-- [webpack](https://webpack.js.org)
+- [IOTA Javascript Library](https://github.com/iotaledger/iota.lib.js/)
 
 ## Instructions (api-node)
 
-* install all dependencies with
+* Load all dependencies in each folder ([frontend](./frontend/) and [carservice](./carservice/)) respecively with:
 ```
 npm install
 ```
-* start swagger editor
+* Start swagger editor
 ```
 swagger project edit
 ```
@@ -28,19 +33,8 @@ swagger project start
 ```
 
 ## Contact
-:telephone_receiver: +49 160 93290142
 
-/*
-All teams should have a team name, and maintain their code as a public repo on the Blockchained Mobility Hackathon GitHub organization. The Github team page should include a readme with the following information:
+For any questions you are welcome to contact:
 
-The team lead must list a mobile phone number
-The platform (ethereum or IOTA)
-The development tools used to build the project
-SDKs used in the project
-APIs used in the project
-Any assets used in the project
-Any libraries used in the project
-Any components not created at the hackathon
-All projects must be submitted as team repos with a track on the Blockchained Mobility Hackathon GitHub organization before judging begins on Sunday July 22 at 14:00. Failure to submit will result in disqualification.
-All winning projects submitted will be subject to code-review. When the hackathon ends at least one member from each winning team must be available to meet with the code review team for a brief review of their submission and to confirm that their team’s Hackathon GitHub has been correctly updated. Applications will be spot checked by code reviewers. All winning projects will be code reviewed to confirm that the code is indeed original work created at the hackathon and any breach of these rules in spirit or in fact, will be grounds for disqualification either at the hackathon or ex-post facto.
-*/
+[Mark Dekker](https://github.com/MarkDekker): +49 160 93290142
+
