@@ -8,8 +8,16 @@ module.exports = {
     // gets stream for that vehicle
     getstreamvehicle:getstreamvehicle,
     // send string "car_2" & content & location >> update main stream 
-    sendvehiclemsg:sendvehiclemsg
+    sendvehiclemsg:sendvehiclemsg,
+    reset:reset
 };
+
+function reset(req, res) {
+    stream = [];
+
+
+    res.json('Reset!');
+  }
 
 function setvehiclelocation(req, res) {
 
@@ -17,13 +25,13 @@ function setvehiclelocation(req, res) {
 
     var id = req.swagger.params.body.value.vehicle;
     var index = vehicles.findIndex(x => x.id === id);
-    console.log('position car at setvehiclelocation (before): ' + JSON.stringify(vehicles[index].location));
+   // console.log('position car at setvehiclelocation (before): ' + JSON.stringify(vehicles[index].location));
 
     vehicles[index].location = req.swagger.params.body.value.location;
 
     //console.log(JSON.stringify(vehicles[index]));
 
-    console.log('position car at setvehiclelocation (after): ' + JSON.stringify(vehicles[index].location));
+    //console.log('position car at setvehiclelocation (after): ' + JSON.stringify(vehicles[index].location));
 
     res.json('vehicle ' + id + ' is now at ' + JSON.stringify(vehicles[index].location));
   }
@@ -41,7 +49,7 @@ function setvehiclelocation(req, res) {
 
     vehicles[index].stream = [];
     
-    console.log('stream at getstreamvehicle (before): ' + JSON.stringify(vehicles[index].stream));
+    //console.log('stream at getstreamvehicle (before): ' + JSON.stringify(vehicles[index].stream));
 
     stream.forEach(function(element) {
         //console.log(element);
@@ -53,7 +61,7 @@ function setvehiclelocation(req, res) {
         }
     });
     
-    console.log('vehicle at getstreamvehicle (after): ' + JSON.stringify(vehicles[index].stream));
+    //console.log('vehicle at getstreamvehicle (after): ' + JSON.stringify(vehicles[index].stream));
     res.json(vehicles[index].stream);
   }
 
@@ -70,7 +78,7 @@ function setvehiclelocation(req, res) {
     // 01 January 1970, 00:00:00, 000 miliseconds
     var timestamp = '' + timeNow.getDate() + ' ' +  monthNames[timeNow.getMonth()] + ' ' + timeNow.getFullYear() + ', ' + timeNow.getHours() + ':' + timeNow.getMinutes() + ':' + timeNow.getSeconds() + ', ' + timeNow.getMilliseconds() + ' miliseconds';
 
-    console.log('Stream (sendvehiclemsg) has ' + JSON.stringify(stream))
+    //console.log('Stream (sendvehiclemsg) has ' + JSON.stringify(stream))
     //console.log(timestamp);
     var msgObject = {
         "location": {
@@ -82,7 +90,7 @@ function setvehiclelocation(req, res) {
         'content': req.swagger.params.body.value.content
       };
 
-    console.log('Stream (sendvehiclemsg) has now ' + JSON.stringify(stream));
+    //console.log('Stream (sendvehiclemsg) has now ' + JSON.stringify(stream));
 
     stream.push(msgObject);
     res.json('Stream (sendvehiclemsg) has now ' + JSON.stringify(stream));

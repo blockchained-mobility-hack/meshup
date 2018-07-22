@@ -42,6 +42,24 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /reset:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: stream
+    get:
+      description: reset
+      # used as the method name of the controller
+      operationId: reset
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /stream:
     # binds a127 app logic to a route
     x-swagger-router-controller: stream

@@ -147,6 +147,16 @@ export default {
         console.log(error);
       });
     },
+    reset: function (id) {
+
+      let that = this;
+
+      axios.get('http://localhost:10010/reset').then((response) => {
+        
+      }).catch((error) => {
+        console.log(error);
+      });
+    },
     start_crash: function(){
       let crash_coords = {'lat': 40.71, 'lon': 73.99}
 
@@ -158,7 +168,11 @@ export default {
         that.crashed_car = 'car_1'
         that.sendevent('car_1', 'I Crashed! Sorry, I was not paying attention', crash_coords)
         that.msgs['car_1'] = that.getstream('car_1')
-      }, 2500);
+        $('#car_6').addClass("break-car-1")
+        setTimeout(function() {
+          that.sendevent('car_6', 'Emergency Braking Maneuver! Could be due to crash.', crash_coords)
+        }, 300);
+      }, 3000);
     },
     get_img_path: function(car_id){
       return './static/' + car_id + '.jpg'
@@ -183,6 +197,7 @@ export default {
   mounted () {
     // -----------------------------------------------
     // ISA HERE
+    this.reset();
 
     let convert_to_coordinates = function(element_position){
       let window_width = $('#map-container').width()

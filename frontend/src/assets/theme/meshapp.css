@@ -35,7 +35,7 @@
   left: 77.77%; top: 93.77%;
 }
 
-#car-3{
+#car_3{
   left: 62.2%; top: 26.97%;
   animation: car-path-3 120s linear infinite;
   animation-direction: alternate;
@@ -54,7 +54,7 @@
 }
 
 #car_6{
-  left: 35%; top: 90%;
+  left: 53.1%; top: 26.84%
 }
 
 .crash-car-1{
