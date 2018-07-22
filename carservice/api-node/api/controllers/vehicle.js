@@ -24,6 +24,7 @@ var vehicles = [{
     "state": "well",
     "location": "tile1"}];
 
+
 function vehicle(req, res) {
 
   var id = (req.swagger.params.id.value < 2) ? req.swagger.params.id.value : 2;

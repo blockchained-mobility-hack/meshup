@@ -74,7 +74,7 @@ function getevents(req, res) {
         'origin': '',
         'time': '',
         'id_sender': '',
-        'message': 'Error ocurred!'
+        'message': 'Error ocurred: ' + error
       });
       res.json(msg);
     }
@@ -92,48 +92,60 @@ function postevent(req, res) {
       }
     })*/
     // const trytes  = 'HELLOXXXXXHELLOWORLDHELLOWORLDHELLOWORLDHELLOWORLDHELLOWORLDHELLOWORLDHELLOWORLDD'
-     const vehicle = 'VEHICLEONE99999999999999999999999999999999999999999999999999999999999999999999999';
+    // 81 characters
+    let vehicleAddress = 'VEHICLE' + req.swagger.params.body.value.vehicle;
+    vehicleAddress += "9".repeat(81-vehicleAddress.length);
     //const message = iota.utils.toTrytes('Airbag: OMG, I just released!')
     // sendMessage (vehicle1, 40.717000, -74.006400, 'Airbag: OMG, I just released!');
     // sendMessage (vehicle2,40.717000, -74.006400, 'Breaks: Nailed it!! From 100 to 0 in 3s');
     // sendMessage (vehicle3,40.717000, -74.006400, 'Cruise Control: Why is everyone slowing down');
     // sendMessage (vehicle4,40.717000, -74.006400, 'Meshup: Detected Accident ahead');
-    sendMessage (vehicle, req.swagger.params.body.value.lat, req.swagger.params.body.value.lon, req.swagger.params.body.value.msg, res);
-}
-/*
-* Sends a message from a vehicle together with the message to the tangle
-*/
-function sendMessage(vehicleAddress, lat, lon, message, res) {
+    let lat = req.swagger.params.body.value.lat;
+    let lon = req.swagger.params.body.value.lon;
+    let message = req.swagger.params.body.value.msg;
 
-  const messageTryte = iota.utils.toTrytes(message);
+    const messageTryte = iota.utils.toTrytes(message);
 
-  var roundedLat = parseFloat(lat).toFixed(2);
-  var roundedLon = parseFloat(lon).toFixed(2);
+    var roundedLat = parseFloat(lat).toFixed(2);
+    var roundedLon = parseFloat(lon).toFixed(2);
 
-  var tag = roundedLat.concat(roundedLon); //.replace(".", "D").replace(".", "D").replace("-", "M")
+    var tag = roundedLat.concat(roundedLon); //.replace(".", "D").replace(".", "D").replace("-", "M")
 
-  var transactionMessage = '{ "message": "' + message + '", "latitude":' + lat + ', "longitude":' + lon + ' }';
+    var transactionMessage = '{ "message": "' + message + '", "latitude":' + lat + ', "longitude":' + lon + ' }';
 
-  console.log('tag: ' + tag + ' ? ' + iota.utils.toTrytes(tag));
-  console.log('message: ' + transactionMessage);
-  console.log('address: ' + vehicleAddress);
+    console.log('tag: ' + tag + ' ? ' + iota.utils.toTrytes(tag));
+    console.log('message: ' + transactionMessage);
+    console.log('address: ' + vehicleAddress);
 
-  const transfers = [
-  {
-      value: 0,
-      address: vehicleAddress,
-      message: iota.utils.toTrytes(transactionMessage),
-      tag: iota.utils.toTrytes(tag)
-    }
-  ];
+    const transfers = [
+    {
+        value: 0,
+        address: vehicleAddress,
+        message: iota.utils.toTrytes(transactionMessage),
+        tag: iota.utils.toTrytes(tag)
+      }
+    ];
 
-  iota.api.sendTransfer(vehicleAddress, 3, 9, transfers, (error, success) => {
-    if (error) {
-      console.log(error);
-      res.json(error);
-    } else {
-      console.log(success);
-      res.json(success);
-    }
-  });
+    var result = [];
+    iota.api.sendTransfer(vehicleAddress, 3, 9, transfers, (error, success) => {
+      if (error) {
+        console.log(error);
+        result.push({
+          'origin': '',
+          'time': '',
+          'id_sender': '',
+          'message': 'Error ocurred: ' + error
+        });
+      } else {
+        console.log(success);
+        result.push({
+          'origin': success[0].address,
+          'time': success[0].timestamp,
+          'id_sender': success[0].address,
+          'message': success[0].signatureMessageFragment
+        });
+        res.json(result);
+      }
+      
+    });
 }
