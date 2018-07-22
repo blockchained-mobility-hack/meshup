@@ -4,9 +4,9 @@ info:
   title: Mesh Up
 # during dev, should point to your local machine
 host: localhost:10010
-# basePath prefixes all resource paths 
+# basePath prefixes all resource paths
 basePath: /
-# 
+#
 schemes:
   # tip: remove http to make production-grade
   - http
@@ -255,7 +255,7 @@ definitions:
         type: string
     example:
         vehicle: ONE
-        lat: 40.717000
+        lat: 50.817000
         lon: -74.006400
         msg: 'Airbag: OMG, I just released!'
   Suggestion:
@@ -275,16 +275,16 @@ definitions:
         type: string
       content:
         description: message
-        type: string     
+        type: string
       location:
         description: location
-        type: object     
+        type: object
     example:
       vehicle: car_1
       content: "Breaks: Nailed it!! From 100 to 0 in 3s"
       location:
           lat: 40.717000
-          lon: -74.006400 
+          lon: -74.006400
   Location:
     type: object
     properties:
@@ -306,4 +306,3 @@ definitions:
       location:
           lat: 40.717000
           lon: -74.006400
-    
