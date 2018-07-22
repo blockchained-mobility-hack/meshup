@@ -158,7 +158,7 @@ definitions:
     type: object
     properties:
       vehicle:
-        description: vehicle id (3 char ONLY and upper case)
+        description: vehicle id (ONLY LETTERS & UPPER CASE)
         type: string
       lat:
         description: latitude
