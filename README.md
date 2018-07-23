@@ -9,7 +9,7 @@ MESHUP Motorized Emergency Safety Helper Utilizing P2P
 
 Our team consists of five passionated guy with different backgrounds.
 
-**[Mark](https://github.com/MarkDekker)** - team lead, dev, designer & business +49 (160) 9329 0142
+**[Mark](https://github.com/MarkDekker)** - team lead, dev, designer & business
 
 **[Isabel](https://github.com/Zabela)** - scrum master, dev & business
 
@@ -17,7 +17,7 @@ Our team consists of five passionated guy with different backgrounds.
 
 **[Malte](https://github.com/malte136)** - designer
 
-**[Fabian](https://github.com/M3shup)** business practioneer 
+**[Fabian](https://github.com/M3shup)** - destroyer of css, comic relief
 
  ## IDEA
  
